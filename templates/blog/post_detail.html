@@ -1,86 +1,61 @@
 {% extends 'blog/base.html' %}
 {% block title %}{{ post.title }} - PavanBlog{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card p-4">
-                <div class="card-body">
-                    {% if post.category %}
-                        <span class="badge-category mb-3 d-inline-block">{{ post.category.name }}</span>
+<div class="layout">
+    <div>
+        <div class="card fu">
+            <div class="cb">
+                {% if post.category %}<span class="badge gold">{{ post.category.name }}</span>{% endif %}
+                <h1 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;line-height:1.2;margin-bottom:1rem">{{ post.title }}</h1>
+                <div class="meta">
+                    <span><i class="fas fa-user"></i>{{ post.author.username }}</span>
+                    <span><i class="fas fa-calendar"></i>{{ post.created_at|date:"F d, Y" }}</span>
+                    {% if user == post.author %}
+                    <div style="margin-left:auto;display:flex;gap:.5rem">
+                        <a href="{% url 'edit_post' post.slug %}" class="btn bo sm"><i class="fas fa-edit"></i> Edit</a>
+                        <a href="{% url 'delete_post' post.slug %}" class="btn br sm"><i class="fas fa-trash"></i></a>
+                    </div>
                     {% endif %}
-                    <h2 class="fw-bold">{{ post.title }}</h2>
-                    <div class="d-flex align-items-center mt-3 mb-4">
-                        <span class="author-badge me-3">
-                            <i class="fas fa-user me-1 text-primary"></i>{{ post.author.username }}
-                        </span>
-                        <small class="text-muted">
-                            <i class="fas fa-calendar me-1"></i>{{ post.created_at|date:"F d, Y" }}
-                        </small>
-                        {% if user == post.author %}
-                            <div class="ms-auto">
-                                <a href="{% url 'edit_post' post.slug %}" class="btn btn-sm btn-outline-primary me-2">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <a href="{% url 'delete_post' post.slug %}" class="btn btn-sm btn-outline-danger">
-                                    <i class="fas fa-trash"></i> Delete
-                                </a>
-                            </div>
-                        {% endif %}
-                    </div>
-                    <hr>
-                    <div class="post-content" style="line-height: 1.8; font-size: 1.05rem;">
-                        {{ post.content|linebreaks }}
-                    </div>
                 </div>
+                <hr>
+                <div class="pc">{{ post.content|linebreaks }}</div>
             </div>
-
-            <!-- Comments -->
-            <div class="card p-4 mt-4">
-                <h5 class="fw-bold mb-4">
-                    <i class="fas fa-comments me-2 text-primary"></i>Comments ({{ comments.count }})
-                </h5>
+        </div>
+        <div class="card mt2">
+            <div class="cb">
+                <h3 style="font-family:'Playfair Display',serif;font-size:1.25rem;margin-bottom:1.5rem">
+                    <i class="fas fa-comments" style="color:var(--accent);margin-right:.5rem"></i>Comments ({{ comments.count }})
+                </h3>
                 {% for comment in comments %}
-                <div class="border-bottom pb-3 mb-3">
-                    <div class="d-flex justify-content-between">
-                        <span class="fw-bold text-primary">{{ comment.author.username }}</span>
-                        <small class="text-muted">{{ comment.created_at|date:"M d, Y" }}</small>
+                <div class="cmt">
+                    <div class="df jb ac mb1">
+                        <span style="font-weight:600;color:var(--accent);font-size:.875rem">{{ comment.author.username }}</span>
+                        <span class="tm">{{ comment.created_at|date:"M d, Y" }}</span>
                     </div>
-                    <p class="mt-1 mb-0">{{ comment.content }}</p>
+                    <p style="color:var(--text);font-size:.9rem">{{ comment.content }}</p>
                 </div>
-                {% empty %}
-                    <p class="text-muted">No comments yet. Be the first!</p>
-                {% endfor %}
-
+                {% empty %}<p class="tm">No comments yet. Be the first!</p>{% endfor %}
                 {% if user.is_authenticated %}
-                <h6 class="fw-bold mt-4">Add a Comment</h6>
+                <hr>
+                <h6 style="margin-bottom:1rem;font-weight:600">Add a Comment</h6>
                 <form method="post">
                     {% csrf_token %}
                     {{ form.content }}
-                    <button type="submit" class="btn btn-primary mt-2">
-                        <i class="fas fa-paper-plane me-1"></i>Post Comment
-                    </button>
+                    <button type="submit" class="btn bg mt2"><i class="fas fa-paper-plane"></i> Post Comment</button>
                 </form>
                 {% else %}
-                <div class="alert alert-info mt-3">
-                    <a href="{% url 'login' %}">Login</a> to leave a comment.
-                </div>
+                <div class="alert ai mt2"><a href="{% url 'login' %}">Login</a> to leave a comment.</div>
                 {% endif %}
             </div>
         </div>
-
-        <div class="col-lg-4">
-            <div class="sidebar-card">
-                <h6 class="fw-bold"><i class="fas fa-user-circle me-2 text-primary"></i>About Author</h6>
-                <p class="text-muted mb-0">{{ post.author.username }}</p>
-                <small class="text-muted">Member since {{ post.author.date_joined|date:"Y" }}</small>
-            </div>
-            <div class="sidebar-card text-center">
-                <a href="{% url 'home' %}" class="btn btn-primary w-100">
-                    <i class="fas fa-arrow-left me-2"></i>Back to Home
-                </a>
-            </div>
+    </div>
+    <div>
+        <div class="sc">
+            <h6><i class="fas fa-user-circle" style="color:var(--accent);margin-right:.5rem"></i>Author</h6>
+            <p style="font-weight:600">{{ post.author.username }}</p>
+            <p class="tm">Member since {{ post.author.date_joined|date:"Y" }}</p>
         </div>
+        <a href="{% url 'home' %}" class="btn bo" style="width:100%;justify-content:center">← Back to Home</a>
     </div>
 </div>
 {% endblock %}

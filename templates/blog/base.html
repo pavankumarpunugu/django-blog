@@ -4,69 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}PavanBlog{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
-        .navbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important; }
-        .navbar-brand { font-weight: 700; font-size: 1.5rem; color: white !important; }
-        .nav-link { color: rgba(255,255,255,0.9) !important; }
-        .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 60px 0; }
-        .card { border: none; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); transition: transform 0.3s; margin-bottom: 25px; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
-        .card-title a { color: #2d3748; text-decoration: none; font-weight: 700; }
-        .card-title a:hover { color: #667eea; }
-        .badge-category { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; }
-        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); border: none; border-radius: 25px; padding: 8px 25px; }
-        .btn-primary:hover { background: linear-gradient(135deg, #764ba2, #667eea); }
-        .author-badge { background: #e9ecef; border-radius: 20px; padding: 5px 12px; font-size: 0.8rem; }
-        .sidebar-card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
-        .footer { background: #2d3748; color: #a0aec0; padding: 30px 0; margin-top: 60px; }
-        .alert { border-radius: 10px; border: none; }
+        :root{--bg:#0a0a0f;--surface:#13131a;--surface2:#1c1c27;--accent:#e8c547;--red:#ff6b6b;--text:#f0f0f8;--muted:#8888aa;--border:rgba(255,255,255,0.07);--glow:rgba(232,197,71,0.12)}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+        body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 20% 20%,rgba(232,197,71,0.05) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(255,107,107,0.03) 0%,transparent 50%);pointer-events:none;z-index:0}
+        nav{position:sticky;top:0;z-index:100;background:rgba(10,10,15,0.93);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+        .nav-inner{max-width:1100px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:66px}
+        .brand{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:var(--accent);text-decoration:none}
+        .brand span{color:var(--text)}
+        .nav-links{display:flex;align-items:center;gap:.3rem}
+        .nl{color:var(--muted);text-decoration:none;font-size:.875rem;font-weight:500;padding:.45rem .875rem;border-radius:8px;transition:all .2s;display:flex;align-items:center;gap:.4rem}
+        .nl:hover{color:var(--text);background:var(--surface2)}
+        .nl.cta{background:var(--accent);color:#0a0a0f;font-weight:700}
+        .nl.cta:hover{background:#f0d060}
+        main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 2rem}
+        .hero{padding:5rem 0 3.5rem;text-align:center}
+        .tag{display:inline-flex;align-items:center;gap:.5rem;background:var(--surface2);border:1px solid var(--border);color:var(--accent);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.35rem 1rem;border-radius:100px;margin-bottom:1.5rem}
+        .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;line-height:1.1;letter-spacing:-2px;margin-bottom:1.25rem}
+        .hero h1 em{font-style:italic;color:var(--accent)}
+        .hero p{color:var(--muted);font-size:1.1rem;max-width:480px;margin:0 auto 2.5rem;line-height:1.7}
+        .btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+        .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.72rem 1.6rem;border-radius:10px;font-size:.875rem;font-weight:600;text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:'DM Sans',sans-serif}
+        .bg{background:var(--accent);color:#0a0a0f}.bg:hover{background:#f0d060;transform:translateY(-1px)}
+        .bo{background:transparent;color:var(--text);border:1px solid var(--border)}.bo:hover{background:var(--surface2)}
+        .br{background:var(--red);color:#fff}.br:hover{background:#ff5252}
+        .sm{padding:.35rem .9rem;font-size:.78rem}
+        .layout{display:grid;grid-template-columns:1fr 300px;gap:2rem;padding:2rem 0}
+        @media(max-width:860px){.layout{grid-template-columns:1fr}}
+        .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:1.25rem;transition:all .3s}
+        .card:hover{border-color:rgba(232,197,71,.25);box-shadow:0 8px 40px var(--glow);transform:translateY(-3px)}
+        .cb{padding:1.75rem}
+        .ct{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:.75rem;line-height:1.3}
+        .ct a{color:var(--text);text-decoration:none;transition:color .2s}
+        .ct a:hover{color:var(--accent)}
+        .badge{display:inline-flex;align-items:center;padding:.22rem .7rem;border-radius:100px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem}
+        .gold{background:rgba(232,197,71,.12);color:var(--accent);border:1px solid rgba(232,197,71,.25)}
+        .green{background:rgba(72,199,142,.12);color:#48c78e;border:1px solid rgba(72,199,142,.25)}
+        .gray{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+        .meta{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;font-size:.78rem;color:var(--muted);margin-top:1rem}
+        .meta i{color:var(--accent);margin-right:.2rem}
+        .sc{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+        .sc h6{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:1rem}
+        .fc{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem;max-width:460px;margin:3rem auto}
+        .wide{max-width:720px}
+        .fc h2{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;margin-bottom:.4rem}
+        .sub{color:var(--muted);font-size:.875rem;margin-bottom:2rem;display:block}
+        .fg{margin-bottom:1.25rem}
+        .fl{display:block;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem}
+        input,textarea,select{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:.75rem 1rem;border-radius:10px;font-size:.9rem;font-family:'DM Sans',sans-serif;transition:all .2s;outline:none;-webkit-appearance:none}
+        input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow)}
+        select option{background:var(--surface2)}
+        .alert{padding:.85rem 1.2rem;border-radius:10px;font-size:.85rem;margin:1rem 0;display:flex;align-items:center;gap:.5rem}
+        .as{background:rgba(72,199,142,.1);border:1px solid rgba(72,199,142,.3);color:#48c78e}
+        .ae{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);color:var(--red)}
+        .ai{background:rgba(232,197,71,.1);border:1px solid rgba(232,197,71,.3);color:var(--accent)}
+        .sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+        .st{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700}
+        hr{border:none;border-top:1px solid var(--border);margin:1.5rem 0}
+        footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.8rem;margin-top:4rem}
+        footer span{color:var(--accent)}
+        .empty{text-align:center;padding:4rem 2rem;color:var(--muted)}
+        .empty i{font-size:3rem;margin-bottom:1rem;opacity:.2;display:block}
+        .empty h5{font-size:1.1rem;margin-bottom:.5rem;color:var(--text)}
+        .pc{line-height:1.9;font-size:1.05rem;color:#d0d0e8}
+        .pc p{margin-bottom:1.25rem}
+        .cmt{padding:1.25rem;background:var(--surface2);border-radius:12px;margin-bottom:.875rem;border:1px solid var(--border)}
+        .df{display:flex}.ac{align-items:center}.jb{justify-content:space-between}.g2{gap:.75rem}
+        .mt1{margin-top:.5rem}.mt2{margin-top:1rem}.mt3{margin-top:1.5rem}
+        .mb1{margin-bottom:.5rem}.tm{color:var(--muted);font-size:.83rem}
+        a{color:var(--accent)}
+        @keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+        .fu{animation:fu .5s ease forwards}
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">
-            <i class="fas fa-pen-fancy me-2"></i>PavanBlog
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home me-1"></i>Home</a></li>
-                {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'create_post' %}"><i class="fas fa-plus me-1"></i>New Post</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'my_posts' %}"><i class="fas fa-list me-1"></i>My Posts</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-1"></i>Logout ({{ user.username }})</a></li>
-                {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt me-1"></i>Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}"><i class="fas fa-user-plus me-1"></i>Register</a></li>
-                {% endif %}
-            </ul>
+<nav>
+    <div class="nav-inner">
+        <a href="{% url 'home' %}" class="brand">Pavan<span>Blog</span></a>
+        <div class="nav-links">
+            <a href="{% url 'home' %}" class="nl"><i class="fas fa-home"></i> Home</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'create_post' %}" class="nl cta"><i class="fas fa-plus"></i> Write</a>
+                <a href="{% url 'my_posts' %}" class="nl"><i class="fas fa-list"></i> Posts</a>
+                <a href="{% url 'logout' %}" class="nl"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="nl"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="{% url 'register' %}" class="nl cta"><i class="fas fa-user-plus"></i> Register</a>
+            {% endif %}
         </div>
     </div>
 </nav>
-
-<div class="container mt-3">
+<main>
     {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    {% endfor %}
-</div>
-
-{% block content %}{% endblock %}
-
-<footer class="footer text-center">
-    <div class="container">
-        <p class="mb-0"><i class="fas fa-pen-fancy me-2"></i>PavanBlog — Built with Django by Punugu Pavan Kumar</p>
+    <div class="alert {% if message.tags == 'success' %}as{% elif message.tags == 'error' %}ae{% else %}ai{% endif %}">
+        <i class="fas fa-info-circle"></i> {{ message }}
     </div>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% endfor %}
+    {% block content %}{% endblock %}
+</main>
+<footer><p>Built with ❤️ by <span>Punugu Pavan Kumar</span> · Django · 2026</p></footer>
 </body>
 </html>

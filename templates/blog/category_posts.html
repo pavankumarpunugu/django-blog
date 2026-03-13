@@ -1,24 +1,24 @@
 {% extends 'blog/base.html' %}
 {% block title %}{{ category.name }} - PavanBlog{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <h4 class="fw-bold mb-4">
-        <span class="badge-category">{{ category.name }}</span>
-        <span class="ms-2">Posts</span>
-    </h4>
+<div style="padding:2rem 0">
+    <div class="sh">
+        <h2 class="st"><span class="badge gold">{{ category.name }}</span> Posts</h2>
+        <a href="{% url 'home' %}" class="btn bo sm">← Home</a>
+    </div>
     {% for post in posts %}
-    <div class="card p-3">
-        <div class="card-body">
-            <h5 class="card-title">
-                <a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a>
-            </h5>
-            <p class="text-muted">{{ post.excerpt|default:post.content|truncatewords:20 }}</p>
-            <small class="text-muted">By {{ post.author.username }} · {{ post.created_at|date:"M d, Y" }}</small>
+    <div class="card">
+        <div class="cb">
+            <div class="ct"><a href="{% url 'post_detail' post.slug %}">{{ post.title }}</a></div>
+            <p class="tm">{{ post.excerpt|default:post.content|truncatewords:20 }}</p>
+            <div class="meta">
+                <span><i class="fas fa-user"></i>{{ post.author.username }}</span>
+                <span><i class="fas fa-calendar"></i>{{ post.created_at|date:"M d, Y" }}</span>
+            </div>
         </div>
     </div>
     {% empty %}
-    <p class="text-muted">No posts in this category yet.</p>
+    <div class="empty"><i class="fas fa-inbox"></i><h5>No posts in this category yet.</h5></div>
     {% endfor %}
-    <a href="{% url 'home' %}" class="btn btn-primary mt-3">Back to Home</a>
 </div>
 {% endblock %}
